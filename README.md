@@ -27,16 +27,22 @@ As for the connectivity analysis it must be said that, at the time of this resea
 
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/latency.png?raw=true)
 
+The latency figure when neuron number gets scaled up hints a key property of Loihi. When the partitioning algorithm explained above and the per neurocore neuron numbers are investigated it can be seen that the more neuron the network has which are of the same layer the more spread out it is on the chip which causes the number of neuron per neurocore to decrease. This trend happens for both micro-coded and hard-coded neurons. As the neurons are represented in the dendrite circuit along with CxState field in the SRAM, the decrease in neuron numbers per neurocore explain the decrease in latency since the dendrite circuit prcoess each neuron sequently except it is able to multi-thread but still in the end the neurons in each PE in dendrite circuit work serially. While this explains the behaviour of micro-coded neurons, the hard-coded neurons behave differently as they are all processed at the same time regarldess of the neurons that needs to be processed. This finding makes us believe that the Loihi microarchitecture optimizes the hard-coded neurons to a degree of fully parallel processing of neurons.
+
+
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/latency_K.png?raw=true)
 
-
+In the conectivity test except few outliers we do not recieve any result that is not expected since the synaptic integration is considarbly fast and the dense process results in normally sparse or zero connections to be calculated anyway.
 ## Energy 
 
 
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/energy.png?raw=true)
 
+The energy metric with neuron number scaling up shows that while there are more neurocore overheads with the overly spreaded neurons across neurocores, the latency decrease due to less workload per neurocore accomplishes to decrease overall energy dissipition.
+
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/energy_K.png?raw=true)
 
+The connectivity results shows a slow fluctuations which may be caused by several reasons depending on the underlying microarchitecure. If Loihi 2 utilizes a zero-skipping algorithm as the non-zero weights decrease with increased connectivity the now computed weights may result in more energy dissipition. Another reason could be the compression of common weights. As the connectivity increases the common weights decrease (zero) which results in more memory usage along with more computation. 
 
 
 ## Spiking Activity
