@@ -50,7 +50,11 @@ The connectivity results shows a slow fluctuations which may be caused by severa
 
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/number_spikes.png?raw=true)
 
+The spiking activity when the neuron numbers are upscaled since connectivity between spike generators and excitatory layers are fixed. This balance state is also satisfied per individual neuron on inhibitory layer. There is an expected exponential increase.
+
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/number_spikes_K.png?raw=true)
+
+When the neuron number is constant the difference in connectivity as defined by the weight equatons and dynamic relation between connection probability should keep the network stable in terms of spiking rate. From the figure it can be seen that the spiking activity is stable around a point with some fluctuation.
 
 
 
@@ -68,9 +72,14 @@ The connectivity results shows a slow fluctuations which may be caused by severa
 
 ## Hardware Resources
 
+
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/CxStates.png?raw=true)
 
+Comparatmental states (CxStates) are implemented as 64 bit SRAM fields which store dynamic neuron states. Therefore each indiviudal neuron occupies predefined number of CxStates according to their neruon model implementation and the complexity of the model. As it is predefined and constant for a neuron model it is scaled by number of neurons.
+
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/CxStates_K.png?raw=true)
+
+The conectivity probability under constant neuron number does not effect the SRAM memory needed for the network neurons thus do not incur and change during sweeping of the connectivity parameter.
 
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/Synapses.png?raw=true)
 
