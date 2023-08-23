@@ -63,11 +63,19 @@ When the neuron number is constant the difference in connectivity as defined by 
 
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/Energy_per_neuron.png?raw=true)
 
+Since the current partitioning algorithm results in more parallelized workload as the network scales up, the reduced energy along with bigger populations cause the energy per neuron metric to go down. The interesting point to take out from this image is how as the neuron per neurocore number converges to a singular neuron, the custom-coded neuron approximates the hard-coded LIF neuron. This indicates the point we have made in the earlier explanations about the efficient way of hard-coded implementations.
+
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/Energy_per_neuron_K.png?raw=true)
+
+The connectivity analysis does not fit well with the current metric since the population sizes are fixed, there is a fluctuation caused by the change in energy but general trend is stable to say the current connection process implementation of dense do not incur a big penalty in terms of its energy dissipation when the internal weight matrix changes.
 
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/Energy_per_neuron_per_spike.png?raw=true)
 
+The energy per neuron per spike metric shows that each neurocore microcircuit consumes less energy as the network gets spread out by the partition algorithm and converges as the workload of a single neurocore boils down to one (or a size that is close) micro-circuit run for a neuron per neurocore.
+
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/Energy_per_neuron_per_spike_K.png?raw=true)
+
+The connectivity analysis for per neuron per spike case performs similarly to the per neuron metric since the WTA network is designed in a way to balance the inputting synapse currents regardless of connectivity parameter this causes somewhat stable spike count since the neuron numbers are fixed which leads the same behaviour in all energy and spike counts.
 
 
 ## Hardware Resources
@@ -83,8 +91,16 @@ The conectivity probability under constant neuron number does not effect the SRA
 
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/Synapses.png?raw=true)
 
+In the WTA network for population size analysis the connectivity or rather pre-synaptic connections per neuron is kept constant, along with the network topology which determines the number of connections this leads to deterministic synaptic mappping and as expected this mapping is independant of the neuron model.
+
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/Synapses_K.png?raw=true)
+
+The synapstic memory usage in SRAM which roughly corresponds to the amount of synaptic weights for our case in connectivity algorithm showcase a steady decrease as the sparsity in the weight matrix reduces. This may be explained if the underlying SRAM synaptic weight field comperssion algorithm which is etched in silicon is known but since we do not have access to the algorithm we can only speculate. Since the variety or range of the synaptic weights are limited with weights going in the extreme regions of what 8 bit resolution can offer the weights get packed around in a certain value which makes the common values more dense therefore giving a better performance in terms of memory utiliziation by algorithm exploiting the redundancy.
 
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/Cores.png?raw=true)
 
+The partitioning algorithm assigns each unique net object which represent an abstract neurocore to its own neurocore. This assignment at first works assuming that any particular abstract neurocore is unconstrained. After this partitioning takes place the real hardware constrainsts are introduced and the algorithm simply divides the net object assigned to a core in half until the constraints per neurocore is satisfied. As the synaptic memory gets larger and larger the neurocore memory is dominated by the synapses and the lack of sparse process makes it so that regardless of connectivity propability or K, the density of synapses grow. As a single neuron requires more synapse the neurocores accumulate less numbers of neurons which causes more neurocores to be utilized to map the whole network and this can be seen in the figure clearly as the number of cores follows the synapse memory utilization.
+
 ![alt text](https://github.com/OzU-CAST/LoihiScalingEfficiency/blob/main/Figs/Cores_K.png?raw=true)
+
+The conectivity analysis shows that since there is a steady decline in the synapse numbers the core utilization follows the trend with a few outliers and the coefficient which results in a different rate of descent. This outliers are also unkown to us in terms of their explanation except that there is a change that they result in a perfect mapping since they do occur in synapse numbers too. For a more through and accurate explanation the inner workings of the partitioning algorithm has to be deduced which is out of the scope of this research.
